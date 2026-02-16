@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="panel">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/ButtonPanel.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>meshes/ButtonPanel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+    </link>
+    <!-- 3x2 grid of buttons on the front face -->
+    <!-- Stems point into panel along -X, caps face outward -->
+    <!-- Row 1 (bottom) -->
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_1</name>
+      <pose>0.7 0.15 0.59 0 -1.5708 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_2</name>
+      <pose>0.7 0.35 0.59 0 -1.5708 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_3</name>
+      <pose>0.7 0.55 0.59 0 -1.5708 0</pose>
+    </include>
+    <!-- Row 2 (top) -->
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_4</name>
+      <pose>0.7 0.15 0.79 0 -1.5708 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_5</name>
+      <pose>0.7 0.35 0.79 0 -1.5708 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/asom/ros2_ws/src/table/models/Button</uri>
+      <name>Button_6</name>
+      <pose>0.7 0.55 0.79 0 -1.5708 0</pose>
+    </include>
+  </model>
+</sdf>

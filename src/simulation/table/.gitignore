@@ -1,0 +1,16 @@
+# Build and install directories
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+.claude

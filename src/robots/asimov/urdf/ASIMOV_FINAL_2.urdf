@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="asimov">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.535855151648689 -0.210630038502591 0.130448083148573"
+        rpy="0 0 0" />
+      <mass
+        value="117.071257247369" />
+      <inertia
+        ixx="1.32673730818558"
+        ixy="6.22942728110869E-05"
+        ixz="0.00254829946621228"
+        iyy="0.809705166628433"
+        iyz="-3.80130720440823E-05"
+        izz="1.23489819344999" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.866666666666667 0.909803921568627 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="FL_wheel">
+    <inertial>
+      <origin
+        xyz="-3.2273509147196E-05 -0.0240892137047773 9.72420589838707E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.47815404513433" />
+      <inertia
+        ixx="0.00116052843211105"
+        ixy="-1.28841356367871E-08"
+        ixz="-1.89908204591265E-07"
+        iyy="0.00211767810181349"
+        iyz="3.85962784208534E-08"
+        izz="0.00116103753976682" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/FL_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.909803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/FL_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl-wheel"
+    type="continuous">
+    <origin
+      xyz="-0.057013 0.063627 -0.131"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="FL_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="10" />
+    <dynamics
+      damping="0.1"
+      friction="0.1" />
+  </joint>
+  <link
+    name="FR_wheel">
+    <inertial>
+      <origin
+        xyz="9.96622573418149E-05 0.0240892137947505 2.37706705375762E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.478154045074713" />
+      <inertia
+        ixx="0.00116106640130735"
+        ixy="-3.9580828166295E-08"
+        ixz="1.43318405792121E-07"
+        iyy="0.00211767811981765"
+        iyz="-9.37490473170902E-09"
+        izz="0.00116049957641766" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/FR_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.909803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/FR_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr-wheel"
+    type="continuous">
+    <origin
+      xyz="-0.057013 -0.48363 -0.13"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="FR_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="10" />
+    <dynamics
+      damping="0.1"
+      friction="0.1" />
+  </joint>
+  <link
+    name="RR_wheel">
+    <inertial>
+      <origin
+        xyz="9.96622573420369E-05 0.0240892137947505 2.37706705374652E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.478154045074714" />
+      <inertia
+        ixx="0.00116106640130736"
+        ixy="-3.95808281657491E-08"
+        ixz="1.43318405800204E-07"
+        iyy="0.00211767811981766"
+        iyz="-9.37490472959415E-09"
+        izz="0.00116049957641766" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/RR_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.909803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/RR_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rr-wheel"
+    type="continuous">
+    <origin
+      xyz="-0.80601 -0.48363 -0.13"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="RR_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="10" />
+    <dynamics
+      damping="0.1"
+      friction="0.1" />
+  </joint>
+  <link
+    name="RL_wheel">
+    <inertial>
+      <origin
+        xyz="-3.22735091469184E-05 -0.0240892137047771 9.72420589836764E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.478154045134329" />
+      <inertia
+        ixx="0.00116052843211105"
+        ixy="-1.288413563753E-08"
+        ixz="-1.89908204595265E-07"
+        iyy="0.00211767810181349"
+        iyz="3.85962784215217E-08"
+        izz="0.00116103753976682" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/RL_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.909803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://asimov/meshes/RL_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rl-wheel"
+    type="continuous">
+    <origin
+      xyz="-0.80601 0.063627 -0.131"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="RL_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="10" />
+    <dynamics
+      damping="0.1"
+      friction="0.1" />
+  </joint>
+</robot>
