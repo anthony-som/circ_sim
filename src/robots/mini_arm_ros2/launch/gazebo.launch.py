@@ -28,6 +28,13 @@ def generate_launch_description():
         "file://" + mesh_dir + "/",
     )
 
+    # Resolve $(find mini_arm_ros2) so the ign_ros2_control plugin can
+    # locate controllers.yaml at runtime.
+    robot_description = robot_description.replace(
+        "$(find mini_arm_ros2)",
+        pkg,
+    )
+
     rviz_config = os.path.join(pkg, "config", "mini_arm.rviz")
 
     # Launch arguments

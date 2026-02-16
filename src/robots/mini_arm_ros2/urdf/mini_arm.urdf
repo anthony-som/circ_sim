@@ -711,7 +711,7 @@
   <gazebo>
     <plugin filename="ign_ros2_control-system"
             name="ign_ros2_control::IgnitionROS2ControlPlugin">
-      <parameters>/home/asom/arm_ws/install/mini_arm_ros2/share/mini_arm_ros2/config/controllers.yaml</parameters>
+      <parameters>$(find mini_arm_ros2)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>
 

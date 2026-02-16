@@ -9,8 +9,8 @@ def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     pkg_my_world = get_package_share_directory('table')
 
-    # Let Gazebo find mini_arm mesh files (robotic_arm_6dof package)
-    arm_mesh_pkg = get_package_share_directory('robotic_arm_6dof')
+    # Let Gazebo find mini_arm mesh files
+    arm_mesh_pkg = get_package_share_directory('mini_arm_ros2')
     set_gz_resource = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=os.path.dirname(arm_mesh_pkg),
