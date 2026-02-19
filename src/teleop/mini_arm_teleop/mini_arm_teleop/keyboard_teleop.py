@@ -27,7 +27,9 @@ Teleop keys (press, no Enter):
 class KeyboardTeleop(Node):
     def __init__(self):
         super().__init__('mini_arm_keyboard_teleop')
-        self.pub = self.create_publisher(Float64MultiArray, '/arm_forward_controller/commands', 10)
+        topic = self.declare_parameter(
+            'cmd_topic', '/arm_forward_controller/commands').value
+        self.pub = self.create_publisher(Float64MultiArray, topic, 10)
         self.q = [0.0] * 6
         self.step = 0.05
         self.get_logger().info(HELP)

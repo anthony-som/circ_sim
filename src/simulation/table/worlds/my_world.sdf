@@ -17,6 +17,7 @@
       <background>0.7 0.7 0.7 1</background>
       <shadows>true</shadows>
     </scene>
+
     <model name='ground_plane'>
       <static>true</static>
       <link name='link'>
@@ -28,9 +29,7 @@
             </plane>
           </geometry>
           <surface>
-            <friction>
-              <ode/>
-            </friction>
+            <friction><ode/></friction>
             <bounce/>
             <contact/>
           </surface>
@@ -48,47 +47,49 @@
             <specular>0.8 0.8 0.8 1</specular>
           </material>
         </visual>
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <inertial>
-          <pose>0 0 0 0 -0 0</pose>
+          <pose>0 0 0 0 0 0</pose>
           <mass>1</mass>
           <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
+            <ixx>1</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>1</iyy><iyz>0</iyz><izz>1</izz>
           </inertia>
         </inertial>
-        <enable_wind>false</enable_wind>
       </link>
-      <pose>0 0 0 0 -0 0</pose>
-      <self_collide>false</self_collide>
+      <pose>0 0 0 0 0 0</pose>
     </model>
+
+    <!-- Table: surface at z=1.015, centered at x=-3 y=-0.656 -->
     <include>
-      <uri>file:///home/asom/.ignition/fuel/fuel.gazebosim.org/openrobotics/models/table/4</uri>
+      <uri>model://Table</uri>
       <name>Table</name>
-      <pose>-3 -0.655982 0 0 -0 0</pose>
-    </include>
-    <include>
-      <uri>file:///home/asom/ros2_ws/src/table/models/Panel</uri>
-      <name>ButtonPanel</name>
-      <pose>-0.074722 -0.655982 0 0 -0 0</pose>
-    </include>
-    <include>
-      <uri>file:///home/asom/ros2_ws/src/table/models/TransportBox</uri>
-      <name>TransportBox</name>
-      <pose>-1 -1 0 0 -0 0</pose>
+      <pose>-3 -0.656 0 0 0 0</pose>
     </include>
 
-        <include>
-      <uri>file:///home/asom/ros2_ws/src/table/models/CreditCube</uri>
-      <name>CreditCube</name>
-      <pose>2 -0.655982 0 0 -0 0</pose>
+    <!-- Button panel -->
+    <include>
+      <uri>model://Panel</uri>
+      <name>ButtonPanel</name>
+      <pose>-0.075 -0.656 0 0 0 0</pose>
     </include>
+
+    <!-- Transport box -->
+    <include>
+      <uri>model://TransportBox</uri>
+      <name>TransportBox</name>
+      <pose>-1 -1 0 0 0 0</pose>
+    </include>
+
+    <!-- Credit cube on the table (table surface ~1.015m) -->
+    <include>
+      <uri>model://CreditCube</uri>
+      <name>CreditCube</name>
+      <pose>-3.3 -0.656 1.06 0 0 0</pose>
+    </include>
+
     <light name='sun' type='directional'>
-      <pose>0 0 10 0 -0 0</pose>
+      <pose>0 0 10 0 0 0</pose>
       <cast_shadows>true</cast_shadows>
       <intensity>1</intensity>
       <direction>-0.5 0.1 -0.9</direction>
@@ -97,14 +98,9 @@
       <attenuation>
         <range>1000</range>
         <linear>0.01</linear>
-        <constant>0.90000000000000002</constant>
+        <constant>0.9</constant>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <spot>
-        <inner_angle>0</inner_angle>
-        <outer_angle>0</outer_angle>
-        <falloff>0</falloff>
-      </spot>
     </light>
   </world>
 </sdf>

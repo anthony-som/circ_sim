@@ -35,21 +35,33 @@ def generate_launch_description():
         pkg,
     )
 
+    # Rename the "world" link so Gazebo doesn't anchor the model to the
+    # world origin — this lets the -x/-y/-z spawn position work correctly.
+    robot_description = robot_description.replace(
+        '<link name="world"/>',
+        '<link name="arm_anchor"/>',
+    )
+    robot_description = robot_description.replace(
+        '<parent link="world"/>',
+        '<parent link="arm_anchor"/>',
+    )
+
     rviz_config = os.path.join(pkg, "config", "mini_arm.rviz")
 
     # Launch arguments
     world_arg = DeclareLaunchArgument(
         "world", default_value="empty",
-        description="Gazebo world name (must match a running world, or SDF file to launch)",
+        description="Gazebo world name (must match a running world)",
     )
     headless_gz_arg = DeclareLaunchArgument(
         "launch_gazebo", default_value="true",
         description="Set to false if Gazebo is already running from another package",
     )
+    x_arg = DeclareLaunchArgument("x", default_value="0.0")
+    y_arg = DeclareLaunchArgument("y", default_value="0.0")
+    z_arg = DeclareLaunchArgument("z", default_value="0.1")
 
     # Set resource path so Gazebo can find the STL meshes
-    # IGN_GAZEBO_RESOURCE_PATH for Fortress (Gazebo Sim 6.x),
-    # GZ_SIM_RESOURCE_PATH for Garden+ (Gazebo Sim 7+)
     resource_path = os.path.dirname(pkg)
     set_ign_resource = SetEnvironmentVariable(
         name="IGN_GAZEBO_RESOURCE_PATH",
@@ -72,23 +84,21 @@ def generate_launch_description():
     )
 
     # Spawn the arm into Gazebo using the robot_description topic
-    # This preserves <gazebo> plugin tags (including ign_ros2_control) that
-    # ign sdf -p would strip during URDF-to-SDF conversion.
     spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
         arguments=[
             "-topic", "robot_description",
             "-name", "mini_arm_ros2",
-            "-z", "0.1",
+            "-x", LaunchConfiguration("x"),
+            "-y", LaunchConfiguration("y"),
+            "-z", LaunchConfiguration("z"),
             "-world", LaunchConfiguration("world"),
         ],
         output="screen",
     )
 
-    # Spawn controllers strictly sequentially (JSB must finish before arm starts).
-    # Running them as parallel Nodes can deadlock the CM's synchronous service
-    # handling inside the Gazebo physics loop.
+    # Spawn controllers sequentially
     spawner_controllers = ExecuteProcess(
         cmd=[
             "bash", "-c",
@@ -121,33 +131,29 @@ def generate_launch_description():
     )
 
     # Conditionally launch Gazebo or just spawn into existing world
+    from launch.conditions import IfCondition
     actions = [
         world_arg,
         headless_gz_arg,
+        x_arg, y_arg, z_arg,
         set_ign_resource,
         set_gz_resource,
         robot_state_publisher,
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(
+                    get_package_share_directory("ros_gz_sim"),
+                    "launch",
+                    "gz_sim.launch.py",
+                )
+            ),
+            launch_arguments={"gz_args": "-s -r empty.sdf"}.items(),
+            condition=IfCondition(LaunchConfiguration("launch_gazebo")),
+        ),
+        clock_bridge,
+        TimerAction(period=3.0, actions=[spawn_entity]),
+        TimerAction(period=15.0, actions=[spawner_controllers]),
+        TimerAction(period=22.0, actions=[rviz]),
     ]
 
-    # Always include Gazebo launch — if already running from another package,
-    # set launch_gazebo:=false and only the spawn + controllers run
-    from launch.conditions import IfCondition
-    gz_sim_conditional = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("ros_gz_sim"),
-                "launch",
-                "gz_sim.launch.py",
-            )
-        ),
-        launch_arguments={"gz_args": "-s -r empty.sdf"}.items(),
-        condition=IfCondition(LaunchConfiguration("launch_gazebo")),
-    )
-
-    actions.append(gz_sim_conditional)
-    actions.append(clock_bridge)
-    actions.append(TimerAction(period=3.0, actions=[spawn_entity]))
-    # Wait for Gazebo to fully load the model before spawning controllers
-    actions.append(TimerAction(period=15.0, actions=[spawner_controllers]))
-    actions.append(TimerAction(period=22.0, actions=[rviz]))
     return LaunchDescription(actions)

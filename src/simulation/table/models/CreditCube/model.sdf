@@ -4,15 +4,15 @@
     <static>false</static>
     <link name="link">
       <inertial>
-        <mass>0.5</mass>
-        <pose>0.0381 0.0381 0.0381 0 0 0</pose>
+        <mass>0.0625</mass>
+        <pose>0.01905 0.01905 0.01905 0 0 0</pose>
         <inertia>
-          <ixx>0.000484</ixx>
+          <ixx>3.025e-05</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.000484</iyy>
+          <iyy>3.025e-05</iyy>
           <iyz>0</iyz>
-          <izz>0.000484</izz>
+          <izz>3.025e-05</izz>
         </inertia>
       </inertial>
       <collision name="collision">
@@ -20,6 +20,7 @@
         <geometry>
           <mesh>
             <uri>meshes/CreditCube.stl</uri>
+            <scale>0.5 0.5 0.5</scale>
           </mesh>
         </geometry>
       </collision>
@@ -27,6 +28,7 @@
         <geometry>
           <mesh>
             <uri>meshes/CreditCube.stl</uri>
+            <scale>0.5 0.5 0.5</scale>
           </mesh>
         </geometry>
         <material>

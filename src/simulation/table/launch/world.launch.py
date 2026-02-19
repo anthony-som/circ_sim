@@ -9,11 +9,20 @@ def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     pkg_my_world = get_package_share_directory('table')
 
-    # Let Gazebo find mini_arm mesh files
+    # Let Gazebo find model:// URIs (table models) and package meshes
+    models_dir = os.path.join(pkg_my_world, 'models')
     arm_mesh_pkg = get_package_share_directory('mini_arm_ros2')
+    resource_dirs = os.pathsep.join([
+        models_dir,
+        os.path.dirname(arm_mesh_pkg),
+    ])
     set_gz_resource = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
-        value=os.path.dirname(arm_mesh_pkg),
+        value=resource_dirs,
+    )
+    set_ign_resource = SetEnvironmentVariable(
+        name='IGN_GAZEBO_RESOURCE_PATH',
+        value=resource_dirs,
     )
 
     # Path to your world file
@@ -54,6 +63,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         set_gz_resource,
+        set_ign_resource,
         gz_sim,
         bridge_node,
         button_monitor_node,

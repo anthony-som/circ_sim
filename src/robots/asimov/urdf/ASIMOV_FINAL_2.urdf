@@ -26,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://asimov/meshes/base_link.STL" />
+          filename="package://asimov/meshes/decimated/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -36,11 +36,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="-0.43 -0.21 0.13"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://asimov/meshes/base_link.STL" />
+        <box size="0.75 0.55 0.26" />
       </geometry>
     </collision>
   </link>
@@ -66,7 +65,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://asimov/meshes/FL_wheel.STL" />
+          filename="package://asimov/meshes/decimated/FL_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -76,11 +75,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+        xyz="0 -0.024 0"
+        rpy="1.5708 0 0" />
       <geometry>
-        <mesh
-          filename="package://asimov/meshes/FL_wheel.STL" />
+        <cylinder radius="0.075" length="0.048" />
       </geometry>
     </collision>
   </link>
@@ -125,7 +123,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://asimov/meshes/FR_wheel.STL" />
+          filename="package://asimov/meshes/decimated/FR_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -135,11 +133,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+        xyz="0 0.024 0"
+        rpy="1.5708 0 0" />
       <geometry>
-        <mesh
-          filename="package://asimov/meshes/FR_wheel.STL" />
+        <cylinder radius="0.075" length="0.048" />
       </geometry>
     </collision>
   </link>
@@ -184,7 +181,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://asimov/meshes/RR_wheel.STL" />
+          filename="package://asimov/meshes/decimated/RR_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -194,11 +191,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+        xyz="0 0.024 0"
+        rpy="1.5708 0 0" />
       <geometry>
-        <mesh
-          filename="package://asimov/meshes/RR_wheel.STL" />
+        <cylinder radius="0.075" length="0.048" />
       </geometry>
     </collision>
   </link>
@@ -243,7 +239,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://asimov/meshes/RL_wheel.STL" />
+          filename="package://asimov/meshes/decimated/RL_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -253,11 +249,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+        xyz="0 -0.024 0"
+        rpy="1.5708 0 0" />
       <geometry>
-        <mesh
-          filename="package://asimov/meshes/RL_wheel.STL" />
+        <cylinder radius="0.075" length="0.048" />
       </geometry>
     </collision>
   </link>
@@ -280,4 +275,44 @@
       damping="0.1"
       friction="0.1" />
   </joint>
+
+  <!-- Gazebo ros2_control plugin -->
+  <gazebo>
+    <plugin filename="ign_ros2_control-system"
+            name="ign_ros2_control::IgnitionROS2ControlPlugin">
+      <parameters>$(find asimov)/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- ros2_control hardware interface -->
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+    </hardware>
+
+    <joint name="fl-wheel">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="fr-wheel">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="rl-wheel">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="rr-wheel">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
 </robot>
