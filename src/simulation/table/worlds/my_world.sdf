@@ -70,25 +70,25 @@
       <pose>-3 -0.656 0 0 0 0</pose>
     </include>
 
-    <!-- Button panel -->
+    <!-- Button panel (on table surface at z=1.015, within arm reach) -->
     <include>
       <uri>model://Panel</uri>
       <name>ButtonPanel</name>
-      <pose>-0.075 -0.656 0 0 0 1.5708</pose>
+      <pose>-3.2 -0.45 1.015 0 0 -0.9</pose>
     </include>
 
-    <!-- Transport box -->
+    <!-- Transport box (on table surface at z=1.015) -->
     <include>
       <uri>model://TransportBox</uri>
       <name>TransportBox</name>
-      <pose>-2.6 -0.6 1.06 0 0 0</pose>
+      <pose>-2.65 -0.55 1.015 0 0 0</pose>
     </include>
 
     <!-- Credit cube on the table (table surface ~1.015m) -->
     <include>
       <uri>model://CreditCube</uri>
       <name>CreditCube</name>
-      <pose>-2.7 -0.8 1.06 0 0 0</pose>
+      <pose>-2.65 -0.75 1.015 0 0 0</pose>
     </include>
 
     <light name='sun' type='directional'>

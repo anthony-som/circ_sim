@@ -10,7 +10,6 @@
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>table</exec_depend>
-  <exec_depend>asimov</exec_depend>
   <exec_depend>mini_arm_ros2</exec_depend>
   <exec_depend>mini_arm_teleop</exec_depend>
   <exec_depend>ros_gz_sim</exec_depend>
