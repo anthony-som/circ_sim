@@ -42,6 +42,10 @@ install(DIRECTORY urdf config launch meshes
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(FILES urdf/mini_arm.xacro urdf/mini_arm_standalone.xacro
+  DESTINATION share/${PROJECT_NAME}/urdf
+)
+
 install(PROGRAMS
   scripts/fk_tf_broadcaster.py
   DESTINATION lib/${PROJECT_NAME}

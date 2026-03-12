@@ -31,17 +31,17 @@ class MiniArmIkpyIK(Node):
         # Parameters you may want to tweak
         self.declare_parameter("urdf_pkg", "mini_arm_ros2")
         self.declare_parameter("urdf_relpath", "urdf/mini_arm.urdf")
-        self.declare_parameter("base_link", "base_link")
-        self.declare_parameter("ee_link", "end_base")
+        self.declare_parameter("base_link", "arm_base_link")
+        self.declare_parameter("ee_link", "arm_end_base")
 
         # Your ros2_control joint order
         self.joint_order = [
-            "base_rotator_joint",
-            "shoulder_joint",
-            "elbow_joint",
-            "wrist_joint",
-            "end_joint",
-            "gear_right_joint",
+            "arm_base_rotator_joint",
+            "arm_shoulder_joint",
+            "arm_elbow_joint",
+            "arm_wrist_joint",
+            "arm_end_joint",
+            "arm_gear_right_joint",
         ]
 
         # Per-joint sign and offset to map IK solution into your robot convention.
@@ -93,7 +93,7 @@ class MiniArmIkpyIK(Node):
             )
 
         # ROS I/O
-        self.pub = self.create_publisher(Float64MultiArray, "/arm_forward_controller/commands", 10)
+        self.pub = self.create_publisher(Float64MultiArray, "/arm_controller/commands", 10)
         self.sub = self.create_subscription(JointState, "/joint_states", self.on_joint_state, 20)
 
         self.get_logger().info(

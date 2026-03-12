@@ -1,0 +1,385 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="mini_arm" params="parent prefix *origin scale:=1.0">
+
+    <joint name="${prefix}base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}base_link"/>
+    </joint>
+
+    <link name="${prefix}base_link">
+      <inertial>
+        <origin xyz="${-0.1607 * scale} ${-0.0074 * scale} ${-0.0883 * scale}" rpy="0 0 0" />
+        <mass value="${0.0763 * scale * scale * scale}" />
+        <inertia
+          ixx="${4.2395e-5 * scale**5}" ixy="${-9.8623e-12 * scale**5}" ixz="${6.6503e-8 * scale**5}"
+          iyy="${1.8771e-5 * scale**5}" iyz="${7.1731e-8 * scale**5}" izz="${3.9904e-5 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/base_link.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+        <material name="arm_light_blue">
+          <color rgba="0.792 0.819 0.933 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="${-0.16 * scale} ${-0.007 * scale} ${-0.088 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.16 * scale} ${0.08 * scale} ${0.09 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}base_rotator">
+      <inertial>
+        <origin xyz="${0.0136 * scale} ${0.0002 * scale} ${0.0127 * scale}" rpy="0 0 0" />
+        <mass value="${0.0393 * scale * scale * scale}" />
+        <inertia
+          ixx="${8.9429e-6 * scale**5}" ixy="${-7.1699e-8 * scale**5}" ixz="${6.7888e-12 * scale**5}"
+          iyy="${1.1746e-5 * scale**5}" iyz="${-6.6502e-8 * scale**5}" izz="${1.1323e-5 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/base_rotator.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.014 * scale} 0 ${0.013 * scale}" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${0.02 * scale}" length="${0.025 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}base_rotator_joint" type="revolute">
+      <origin xyz="${-0.15562 * scale} ${-0.016822 * scale} ${-0.042262 * scale}" rpy="0 0 -0.28913" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}base_rotator" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <link name="${prefix}shoulder_link">
+      <inertial>
+        <origin xyz="${-0.0054 * scale} ${0.0207 * scale} ${0.0514 * scale}" rpy="0 0 0" />
+        <mass value="${0.0144 * scale * scale * scale}" />
+        <inertia
+          ixx="${1.1733e-5 * scale**5}" ixy="${1.6179e-6 * scale**5}" ixz="${1.0441e-12 * scale**5}"
+          iyy="${5.9684e-6 * scale**5}" iyz="${1.4746e-12 * scale**5}" izz="${7.9819e-6 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/shoulder_link.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${-0.005 * scale} ${0.021 * scale} ${0.051 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.02 * scale} ${0.02 * scale} ${0.10 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}shoulder_joint" type="revolute">
+      <origin xyz="${0.001501 * scale} ${-0.0236 * scale} ${0.0201 * scale}" rpy="0.12148 -0.43402 -0.28254" />
+      <parent link="${prefix}base_rotator" />
+      <child link="${prefix}shoulder_link" />
+      <axis xyz="-0.25294 0.96748 0" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <link name="${prefix}elbow_Link">
+      <inertial>
+        <origin xyz="${0.0179 * scale} ${0.0231 * scale} ${-0.0008 * scale}" rpy="0 0 0" />
+        <mass value="${0.0420 * scale * scale * scale}" />
+        <inertia
+          ixx="${9.1905e-6 * scale**5}" ixy="${-2.0786e-8 * scale**5}" ixz="${-8.8621e-8 * scale**5}"
+          iyy="${8.8031e-6 * scale**5}" iyz="${-7.9149e-8 * scale**5}" izz="${1.4976e-5 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/elbow_Link.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.018 * scale} ${0.023 * scale} ${-0.001 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.10 * scale} ${0.03 * scale} ${0.01 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}elbow_joint" type="revolute">
+      <origin xyz="${-0.00072 * scale} ${0.00275 * scale} ${0.103 * scale}" rpy="0.10946 -0.67739 0.08213" />
+      <parent link="${prefix}shoulder_link" />
+      <child link="${prefix}elbow_Link" />
+      <axis xyz="-0.13458 0.9909 0" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <link name="${prefix}wrist_Link">
+      <inertial>
+        <origin xyz="${0.0201 * scale} ${0.0185 * scale} ${0.0134 * scale}" rpy="0 0 0" />
+        <mass value="${0.0644 * scale * scale * scale}" />
+        <inertia
+          ixx="${1.0619e-5 * scale**5}" ixy="${-1.4346e-7 * scale**5}" ixz="${6.6510e-8 * scale**5}"
+          iyy="${1.0620e-5 * scale**5}" iyz="${6.6511e-8 * scale**5}" izz="${1.7101e-5 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/wrist_Link.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.020 * scale} ${0.019 * scale} ${0.013 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.055 * scale} ${0.04 * scale} ${0.03 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}wrist_joint" type="revolute">
+      <origin xyz="${0.0957 * scale} ${0.0123 * scale} ${0.0015 * scale}" rpy="0 1.15689 0.13499" />
+      <parent link="${prefix}elbow_Link" />
+      <child link="${prefix}wrist_Link" />
+      <axis xyz="0 1 0" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <link name="${prefix}end_base">
+      <inertial>
+        <origin xyz="${0.0291 * scale} ${-0.0219 * scale} ${-0.0182 * scale}" rpy="0 0 0" />
+        <mass value="${0.0345 * scale * scale * scale}" />
+        <inertia
+          ixx="${8.0002e-6 * scale**5}" ixy="${4.6325e-9 * scale**5}" ixz="${4.0054e-13 * scale**5}"
+          iyy="${4.7842e-6 * scale**5}" iyz="${-7.1715e-8 * scale**5}" izz="${5.9165e-6 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/end_base.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.029 * scale} ${-0.022 * scale} ${-0.018 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.055 * scale} ${0.04 * scale} ${0.02 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}end_joint" type="revolute">
+      <origin xyz="${0.054599 * scale} ${0.025999 * scale} ${0.026999 * scale}" rpy="0.05292 0 0" />
+      <parent link="${prefix}wrist_Link" />
+      <child link="${prefix}end_base" />
+      <axis xyz="-1 0 0" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <!-- Simplified Gripper -->
+    <link name="${prefix}gear_right">
+      <inertial>
+        <origin xyz="${0.0052 * scale} ${0.0001 * scale} ${0.0006 * scale}" rpy="0 0 0" />
+        <mass value="${0.002 * scale * scale * scale}" />
+        <inertia ixx="${6.18e-8 * scale**5}" ixy="0" ixz="0" iyy="${2.47e-7 * scale**5}" iyz="0" izz="${3.06e-7 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/gear_right.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.005 * scale} 0 ${0.001 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.03 * scale} ${0.01 * scale} ${0.005 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}gear_right_joint" type="revolute">
+      <origin xyz="${0.03 * scale} ${-0.0157 * scale} ${0.0043 * scale}" rpy="0 0 -0.60373" />
+      <parent link="${prefix}end_base" />
+      <child link="${prefix}gear_right" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+    </joint>
+
+    <link name="${prefix}finger_right">
+      <inertial>
+        <origin xyz="${0.0222 * scale} ${-0.0022 * scale} ${-0.0044 * scale}" rpy="0 0 0" />
+        <mass value="${0.0022 * scale * scale * scale}" />
+        <inertia ixx="${3.8e-8 * scale**5}" ixy="0" ixz="0" iyy="${5.21e-7 * scale**5}" iyz="0" izz="${5.52e-7 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/finger_right.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.022 * scale} ${-0.002 * scale} ${-0.004 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.04 * scale} ${0.01 * scale} ${0.005 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}finger_right_joint" type="revolute">
+      <origin xyz="${0.030762 * scale} 0 ${0.0025 * scale}" rpy="0 0 0.98133" />
+      <parent link="${prefix}gear_right" />
+      <child link="${prefix}finger_right" />
+      <axis xyz="0 0 1" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <mimic joint="${prefix}gear_right_joint" multiplier="1" offset="0" />
+    </joint>
+
+    <link name="${prefix}gear_left">
+      <inertial>
+        <origin xyz="${0.0074 * scale} ${-0.0001 * scale} ${-0.0011 * scale}" rpy="0 0 0" />
+        <mass value="${0.0014 * scale * scale * scale}" />
+        <inertia ixx="${4.6e-8 * scale**5}" ixy="0" ixz="0" iyy="${2.37e-7 * scale**5}" iyz="0" izz="${2.82e-7 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/gear_left.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.007 * scale} 0 ${-0.001 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.03 * scale} ${0.01 * scale} ${0.005 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}gear_left_joint" type="revolute">
+      <origin xyz="${0.0305 * scale} ${0.01226 * scale} ${0.0068 * scale}" rpy="0 0 0.3732" />
+      <parent link="${prefix}end_base" />
+      <child link="${prefix}gear_left" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <mimic joint="${prefix}gear_right_joint" multiplier="-1" offset="0" />
+    </joint>
+
+    <link name="${prefix}finger_left">
+      <inertial>
+        <origin xyz="${0.0224 * scale} ${0.0023 * scale} ${-0.0044 * scale}" rpy="0 0 0" />
+        <mass value="${0.0022 * scale * scale * scale}" />
+        <inertia ixx="${3.77e-8 * scale**5}" ixy="0" ixz="0" iyy="${5.21e-7 * scale**5}" iyz="0" izz="${5.52e-7 * scale**5}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mini_arm_ros2/meshes/decimated/finger_left.STL" scale="${scale} ${scale} ${scale}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${0.022 * scale} ${0.002 * scale} ${-0.004 * scale}" rpy="0 0 0" />
+        <geometry>
+          <box size="${0.04 * scale} ${0.01 * scale} ${0.005 * scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}finger_left_joint" type="revolute">
+      <origin xyz="${0.030762 * scale} 0 0" rpy="0 0 -0.68869" />
+      <parent link="${prefix}gear_left" />
+      <child link="${prefix}finger_left" />
+      <axis xyz="0 0 1" />
+      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <mimic joint="${prefix}gear_right_joint" multiplier="-1" offset="0" />
+    </joint>
+
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}tool0_fixed" type="fixed">
+      <parent link="${prefix}end_base"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="${0.10 * scale} 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Camera -->
+    <link name="${prefix}camera_link">
+      <inertial>
+        <mass value="${0.01 * scale * scale * scale}"/>
+        <inertia ixx="${1e-6 * scale**5}" ixy="0" ixz="0" iyy="${1e-6 * scale**5}" iyz="0" izz="${1e-6 * scale**5}"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <box size="${0.02 * scale} ${0.02 * scale} ${0.02 * scale}"/>
+        </geometry>
+        <material name="camera_black">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${0.02 * scale} ${0.02 * scale} ${0.02 * scale}"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}camera_joint" type="fixed">
+      <parent link="${prefix}end_base"/>
+      <child link="${prefix}camera_link"/>
+      <origin xyz="${0.05 * scale} 0 ${0.02 * scale}" rpy="0 0.3 0"/>
+    </joint>
+
+  </xacro:macro>
+
+  <xacro:macro name="mini_arm_ros2_control" params="name prefix">
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
+      <joint name="${prefix}base_rotator_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}shoulder_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}elbow_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}wrist_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}end_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}gear_right_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+      </joint>
+      <joint name="${prefix}gear_left_joint">
+        <param name="mimic">${prefix}gear_right_joint</param>
+        <param name="multiplier">-1</param>
+        <command_interface name="position"/>
+      </joint>
+      <joint name="${prefix}finger_right_joint">
+        <param name="mimic">${prefix}gear_right_joint</param>
+        <param name="multiplier">1</param>
+        <command_interface name="position"/>
+      </joint>
+      <joint name="${prefix}finger_left_joint">
+        <param name="mimic">${prefix}gear_right_joint</param>
+        <param name="multiplier">-1</param>
+        <command_interface name="position"/>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+
+</robot>

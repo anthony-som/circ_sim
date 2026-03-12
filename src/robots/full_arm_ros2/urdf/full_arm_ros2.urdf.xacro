@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot name="full_arm_ros2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include the arm macro -->
+  <xacro:include filename="$(find mini_arm_ros2)/urdf/mini_arm.xacro" />
+  <!-- Include the mobile base control macro -->
+  <xacro:include filename="diffbot_ros2_control.xacro"/>
+
+  <!-- Material definitions -->
+  <material name="blue">
+    <color rgba="0.2 0.4 0.8 1.0"/>
+  </material>
+  
+  <material name="wheel_gray">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.5359 -0.2106 0.1304" rpy="0 0 0"/>
+      <mass value="117.071"/>
+      <inertia ixx="1.3267" ixy="0.00006" ixz="0.00255" iyy="0.8097" iyz="-0.00004" izz="1.2349"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Wheels -->
+  <xacro:macro name="wheel" params="prefix suffix x y z">
+    <link name="${prefix}_wheel">
+      <inertial>
+        <origin xyz="0.0 ${suffix == 'L' and -0.0241 or 0.0241} 0.0001" rpy="0 0 0"/>
+        <mass value="0.4782"/>
+        <inertia ixx="0.00116" ixy="0.0" ixz="0.0" iyy="0.00212" iyz="0.0" izz="0.00116"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://full_arm_ros2/meshes/${prefix}_wheel.STL"/>
+        </geometry>
+        <material name="wheel_gray"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://full_arm_ros2/meshes/${prefix}_wheel.STL"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix.lower()}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="${x} ${y} ${z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10" velocity="10"/>
+      <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel prefix="FL" suffix="L" x="-0.057013" y="0.063627" z="-0.131"/>
+  <xacro:wheel prefix="FR" suffix="R" x="-0.057013" y="-0.48363" z="-0.13"/>
+  <xacro:wheel prefix="RL" suffix="L" x="-0.80601" y="0.063627" z="-0.131"/>
+  <xacro:wheel prefix="RR" suffix="R" x="-0.80601" y="-0.48363" z="-0.13"/>
+
+  <!-- Place the scaled arm on the base -->
+  <!-- Adjusting origin to place it on top of the base. 
+       Based on base_link inertial origin and wheel positions, 
+       the base is roughly from x=-0.8 to x=0.
+       Let's place it at x=-0.4 (middle) and y=-0.21 (middle) and z=0.2 (on top).
+  -->
+  <xacro:mini_arm parent="base_link" prefix="arm_" scale="1.5">
+    <origin xyz="0.18 -0.21 0.34" rpy="0 0 0" />
+  </xacro:mini_arm>
+
+  <!-- Combine ROS2 Control -->
+  <xacro:diffbot_ros2_control name="base_control" prefix="" sim="true"/>
+  <xacro:mini_arm_ros2_control name="arm_control" prefix="arm_"/>
+
+</robot>

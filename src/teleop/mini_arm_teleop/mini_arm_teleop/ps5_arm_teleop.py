@@ -26,19 +26,19 @@ class Ps5ArmTeleop(Node):
 
         # Output topic expected by your current ros2_control setup
         self.cmd_topic = self.declare_parameter(
-            "cmd_topic", "/arm_forward_controller/commands"
+            "cmd_topic", "/arm_controller/commands"
         ).value
 
         # Joint order must match your ros2_control joint_order / forward controller order (6)
         self.joint_names = self.declare_parameter(
             "joint_names",
             [
-                "base_rotator_joint",
-                "shoulder_joint",
-                "elbow_joint",
-                "wrist_joint",
-                "end_joint",
-                "gear_right_joint",
+                "arm_base_rotator_joint",
+                "arm_shoulder_joint",
+                "arm_elbow_joint",
+                "arm_wrist_joint",
+                "arm_end_joint",
+                "arm_gear_right_joint",
             ],
         ).value
 

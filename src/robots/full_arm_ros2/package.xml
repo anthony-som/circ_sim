@@ -26,6 +26,8 @@
   <depend>joint_state_broadcaster</depend>
   <depend>diff_drive_controller</depend>
   <depend>geometry_msgs</depend>
+  <depend>mini_arm_ros2</depend>
+  <depend>position_controllers</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
