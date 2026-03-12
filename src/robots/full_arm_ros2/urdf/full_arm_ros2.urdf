@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<robot name="full_arm_ros2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Material definitions for ROS2/RViz compatibility -->
+  <material name="blue">
+    <color rgba="0.2 0.4 0.8 1.0"/>
+  </material>
+  
+  <material name="wheel_gray">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.5359 -0.2106 0.1304" rpy="0 0 0"/>
+      <mass value="117.071"/>
+      <inertia ixx="1.3267" ixy="0.00006" ixz="0.00255" iyy="0.8097" iyz="-0.00004" izz="1.2349"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Front Left Wheel -->
+  <link name="FL_wheel">
+    <inertial>
+      <origin xyz="0.0000 -0.0241 0.0001" rpy="0 0 0"/>
+      <mass value="0.4782"/>
+      <inertia ixx="0.00116" ixy="0.0" ixz="0.0" iyy="0.00212" iyz="0.0" izz="0.00116"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/FL_wheel.STL"/>
+      </geometry>
+      <material name="wheel_gray"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/FL_wheel.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="fl_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="FL_wheel"/>
+    <origin xyz="-0.057013 0.063627 -0.131" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="10"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Front Right Wheel -->
+  <link name="FR_wheel">
+    <inertial>
+      <origin xyz="0.0001 0.0241 0.0000" rpy="0 0 0"/>
+      <mass value="0.4782"/>
+      <inertia ixx="0.00116" ixy="0.0" ixz="0.0" iyy="0.00212" iyz="0.0" izz="0.00116"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/FR_wheel.STL"/>
+      </geometry>
+      <material name="wheel_gray"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/FR_wheel.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="fr_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="FR_wheel"/>
+    <origin xyz="-0.057013 -0.48363 -0.13" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="10"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Rear Right Wheel -->
+  <link name="RR_wheel">
+    <inertial>
+      <origin xyz="0.0001 0.0241 0.0000" rpy="0 0 0"/>
+      <mass value="0.4782"/>
+      <inertia ixx="0.00116" ixy="0.0" ixz="0.0" iyy="0.00212" iyz="0.0" izz="0.00116"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/RR_wheel.STL"/>
+      </geometry>
+      <material name="wheel_gray"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/RR_wheel.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="rr_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="RR_wheel"/>
+    <origin xyz="-0.80601 -0.48363 -0.13" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="10"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Rear Left Wheel -->
+  <link name="RL_wheel">
+    <inertial>
+      <origin xyz="0.0000 -0.0241 0.0001" rpy="0 0 0"/>
+      <mass value="0.4782"/>
+      <inertia ixx="0.00116" ixy="0.0" ixz="0.0" iyy="0.00212" iyz="0.0" izz="0.00116"/>
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/RL_wheel.STL"/>
+      </geometry>
+      <material name="wheel_gray"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://full_arm_ros2/meshes/RL_wheel.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="rl_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="RL_wheel"/>
+    <origin xyz="-0.80601 0.063627 -0.131" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="10"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <xacro:include filename="diffbot_ros2_control.xacro"/>
+
+  <xacro:diffbot_ros2_control
+  name="asimov_control"
+  prefix=""
+  sim="true"/>
+
+
+</robot>
+
+
+

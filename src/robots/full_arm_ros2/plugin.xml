@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<library path="mini_arm_ros2">
+  <class
+    name="mini_arm_ros2/ArmPCA9685System"
+    type="mini_arm_ros2::ArmPCA9685System"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      ros2_control hardware interface that publishes servo degrees to an ESP32 micro-ROS topic.
+    </description>
+  </class>
+</library>
