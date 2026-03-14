@@ -4,15 +4,15 @@
     <static>false</static>
     <link name="link">
       <inertial>
-        <mass>0.4</mass>
-        <pose>0.06096 0.06096 0.04572 0 0 0</pose>
+        <mass>1.0</mass>
+        <pose>0.1524 0.1524 0.1143 0 0 0</pose>
         <inertia>
-          <ixx>7.68e-04</ixx>
+          <ixx>0.0121</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>7.68e-04</iyy>
+          <iyy>0.0121</iyy>
           <iyz>0</iyz>
-          <izz>9.6e-04</izz>
+          <izz>0.0155</izz>
         </inertia>
       </inertial>
       <collision name="collision">
@@ -20,7 +20,6 @@
         <geometry>
           <mesh>
             <uri>meshes/TransportBox.stl</uri>
-            <scale>0.4 0.4 0.4</scale>
           </mesh>
         </geometry>
       </collision>
@@ -28,13 +27,12 @@
         <geometry>
           <mesh>
             <uri>meshes/TransportBox.stl</uri>
-            <scale>0.4 0.4 0.4</scale>
           </mesh>
         </geometry>
         <material>
-          <ambient>0.0 0.1 0.4 1</ambient>
-          <diffuse>0.0 0.2 0.7 1</diffuse>
-          <specular>0.3 0.4 0.9 1</specular>
+          <ambient>0.5 0.0 0.0 1</ambient>
+          <diffuse>0.8 0.0 0.0 1</diffuse>
+          <specular>0.9 0.4 0.4 1</specular>
         </material>
       </visual>
       <sensor name="transport_box_contact" type="contact">
