@@ -28,15 +28,15 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+        <mesh filename="package://full_arm_ros2/meshes/decimated/base_link.STL"/>
       </geometry>
       <material name="blue"/>
     </visual>
-    
+
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://full_arm_ros2/meshes/base_link.STL"/>
+        <mesh filename="package://full_arm_ros2/meshes/decimated/base_link.STL"/>
       </geometry>
     </collision>
   </link>
@@ -52,14 +52,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://full_arm_ros2/meshes/${prefix}_wheel.STL"/>
+          <mesh filename="package://full_arm_ros2/meshes/decimated/${prefix}_wheel.STL"/>
         </geometry>
         <material name="wheel_gray"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://full_arm_ros2/meshes/${prefix}_wheel.STL"/>
+          <mesh filename="package://full_arm_ros2/meshes/decimated/${prefix}_wheel.STL"/>
         </geometry>
       </collision>
     </link>

@@ -2,15 +2,14 @@ import os
 import subprocess
 from launch import LaunchDescription
 from launch.actions import (
+    ExecuteProcess,
     IncludeLaunchDescription,
     TimerAction,
     SetEnvironmentVariable,
     DeclareLaunchArgument,
     OpaqueFunction,
-    RegisterEventHandler,
 )
 from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -23,24 +22,34 @@ def _launch_setup(context):
     mini_arm_pkg = get_package_share_directory("mini_arm_ros2")
     table_pkg = get_package_share_directory("table")
     xacro_path = os.path.join(pkg, "urdf", "full_arm_ros2.urdf.xacro")
-    controllers_yaml = os.path.join(pkg, "config", "combined_controllers.yaml")
 
-    # Compile xacro with mock hardware (same as combined.launch.py)
+    # Compile xacro with sim:=gz so IgnitionSystem and the Gazebo plugin are active
     robot_description = subprocess.check_output(
-        ["xacro", xacro_path, "sim:=true"],
+        ["xacro", xacro_path, "sim:=gz"],
         text=True,
     )
 
     # Replace package:// URIs with file:// for Gazebo mesh loading
     mesh_dir = os.path.join(pkg, "meshes")
-    robot_description_gz = robot_description.replace(
+    robot_description = robot_description.replace(
         "package://full_arm_ros2/meshes/",
         "file://" + mesh_dir + "/",
     )
-    robot_description_gz = robot_description_gz.replace(
+    robot_description = robot_description.replace(
         "package://mini_arm_ros2/",
         "file://" + mini_arm_pkg + "/",
     )
+
+    # Resolve $(find full_arm_ros2) for controllers.yaml path in the Gazebo plugin
+    robot_description = robot_description.replace(
+        "$(find full_arm_ros2)",
+        pkg,
+    )
+
+    # Read spawn position from launch args
+    x = context.launch_configurations.get("x", "-2.8")
+    y = context.launch_configurations.get("y", "-0.656")
+    z = context.launch_configurations.get("z", "1.12")
 
     rviz_config = os.path.join(pkg, "config", "full_arm_ros2.rviz")
 
@@ -53,19 +62,7 @@ def _launch_setup(context):
     set_gz_resource = SetEnvironmentVariable(
         name="GZ_SIM_RESOURCE_PATH", value=resource_dirs)
 
-    # --- Nodes (same control pattern as combined.launch.py) ---
-
-    # Standalone controller manager with mock hardware
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[
-            {"robot_description": robot_description},
-            controllers_yaml,
-        ],
-        output="screen",
-    )
-
+    # Publish robot description so Gazebo can spawn from the topic
     robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -76,36 +73,38 @@ def _launch_setup(context):
         output="screen",
     )
 
+    # Spawn from the topic (like mini_arm) so RSP and Gazebo use the same description
     spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
         arguments=[
-            "-string", robot_description_gz,
+            "-topic", "robot_description",
             "-name", "full_arm_ros2",
             "-world", LaunchConfiguration("world"),
+            "-x", x,
+            "-y", y,
+            "-z", z,
         ],
         output="screen",
     )
 
-    # Controller spawners (event-chained like combined.launch.py)
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-        output="screen",
-    )
-
-    arm_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["arm_controller", "--controller-manager", "/controller_manager"],
-        output="screen",
-    )
-
-    diff_drive_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["diff_drive_controller", "--controller-manager", "/controller_manager"],
+    # Controller spawners with long timeouts (Gazebo's ign_ros2_control plugin
+    # creates the controller manager; it needs time to come up)
+    spawner_controllers = ExecuteProcess(
+        cmd=[
+            "bash", "-c",
+            "ros2 run controller_manager spawner joint_state_broadcaster "
+            "--controller-manager /controller_manager "
+            "--controller-manager-timeout 120 "
+            "&& "
+            "ros2 run controller_manager spawner arm_controller "
+            "--controller-manager /controller_manager "
+            "--controller-manager-timeout 120 "
+            "&& "
+            "ros2 run controller_manager spawner diff_drive_controller "
+            "--controller-manager /controller_manager "
+            "--controller-manager-timeout 120",
+        ],
         output="screen",
     )
 
@@ -132,7 +131,7 @@ def _launch_setup(context):
         output="screen",
     )
 
-    # Conditionally launch Gazebo (skip when world is already running)
+    # Conditionally launch Gazebo
     world_file = os.path.join(table_pkg, "worlds", "my_world.sdf")
     gz_sim_conditional = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -146,39 +145,16 @@ def _launch_setup(context):
         condition=IfCondition(LaunchConfiguration("launch_gazebo")),
     )
 
-    # Chain spawners: arm + diff_drive + rviz start after joint_state_broadcaster
-    delay_arm = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[arm_controller_spawner],
-        )
-    )
-    delay_diff_drive = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[diff_drive_controller_spawner],
-        )
-    )
-    delay_rviz = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz],
-        )
-    )
-
     return [
         set_ign_resource,
         set_gz_resource,
+        robot_state_publisher,
         gz_sim_conditional,
         clock_bridge,
         camera_bridge,
-        robot_state_publisher,
-        control_node,
         TimerAction(period=3.0, actions=[spawn_entity]),
-        joint_state_broadcaster_spawner,
-        delay_arm,
-        delay_diff_drive,
-        delay_rviz,
+        TimerAction(period=15.0, actions=[spawner_controllers]),
+        TimerAction(period=22.0, actions=[rviz]),
     ]
 
 
@@ -188,7 +164,7 @@ def generate_launch_description():
             description="Gazebo world name"),
         DeclareLaunchArgument("launch_gazebo", default_value="true",
             description="Set to false if Gazebo is already running"),
-        DeclareLaunchArgument("x", default_value="-2.8"),
+        DeclareLaunchArgument("x", default_value="5.0"),
         DeclareLaunchArgument("y", default_value="-0.656"),
         DeclareLaunchArgument("z", default_value="1.12"),
         OpaqueFunction(function=_launch_setup),
