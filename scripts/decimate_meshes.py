@@ -5,7 +5,7 @@ Usage:
     python3 decimate_meshes.py <mesh_dir> [target_faces]
 
 Examples:
-    python3 decimate_meshes.py ../src/robots/asimov/meshes 5000
+    python3 decimate_meshes.py ../src/robots/full_arm_ros2/meshes 5000
     python3 decimate_meshes.py ../src/robots/mini_arm_ros2/meshes 10000
 """
 

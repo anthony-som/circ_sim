@@ -22,23 +22,33 @@ def clamp(x, lo, hi):
 
 class CartesianIKTeleop(Node):
     def __init__(self):
-        super().__init__("mini_arm_cartesian_ik_teleop")
+        super().__init__("full_arm_cartesian_ik_teleop")
 
-        # URDF
+        # URDF — load mini_arm URDF for IK chain (same geometry, no prefix)
         pkg_share = get_package_share_directory("mini_arm_ros2")
         urdf_path = pkg_share + "/urdf/mini_arm.urdf"
         self.get_logger().info(f"Loading URDF: {urdf_path}")
 
         self.chain = Chain.from_urdf_file(urdf_path, base_elements=["base_link"])
 
-        # Your joint order used by ros2_control forward controller
-        self.joint_order = [
+        # Joint names without prefix (matching the IK chain from mini_arm URDF)
+        self.ik_joint_order = [
             "base_rotator_joint",
             "shoulder_joint",
             "elbow_joint",
             "wrist_joint",
             "end_joint",
             "gear_right_joint",
+        ]
+
+        # Joint names with arm_ prefix (matching full_arm_ros2 ros2_control config)
+        self.joint_order = [
+            "arm_base_rotator_joint",
+            "arm_shoulder_joint",
+            "arm_elbow_joint",
+            "arm_wrist_joint",
+            "arm_end_joint",
+            "arm_gear_right_joint",
         ]
 
         # Map IK output to your hardware convention
@@ -50,8 +60,8 @@ class CartesianIKTeleop(Node):
         self.limits_lo = np.array([-1.57, -1.57, -1.57, -1.57, -1.57, -1.57], dtype=float)
         self.limits_hi = np.array([ 1.57,  1.57,  1.57,  1.57,  1.57,  1.57], dtype=float)
 
-        # Publisher to your controller
-        self.cmd_pub = self.create_publisher(Float64MultiArray, "/arm_forward_controller/commands", 10)
+        # Publisher to your controller (JointGroupPositionController)
+        self.cmd_pub = self.create_publisher(Float64MultiArray, "/arm_controller/commands", 10)
 
         # Joint states
         self.current_q = np.zeros(6, dtype=float)
@@ -84,9 +94,10 @@ class CartesianIKTeleop(Node):
         self.timer = self.create_timer(0.05, self.loop_20hz)  # 20 Hz
 
         # Build a robust joint index mapping from ikpy chain link names
+        # Use unprefixed ik_joint_order since the chain comes from mini_arm URDF
         self.chain_names = [l.name for l in self.chain.links]
         self.joint_to_chain_index = {}
-        for j in self.joint_order:
+        for j in self.ik_joint_order:
             if j in self.chain_names:
                 self.joint_to_chain_index[j] = self.chain_names.index(j)
 
@@ -179,8 +190,8 @@ class CartesianIKTeleop(Node):
         # Initial guess: build a full vector sized to chain
         q0 = np.zeros(len(self.chain.links), dtype=float)
 
-        # If chain indices are known, seed them
-        for i, j in enumerate(self.joint_order):
+        # If chain indices are known, seed them (use unprefixed names for IK chain)
+        for i, j in enumerate(self.ik_joint_order):
             idx = self.joint_to_chain_index.get(j, None)
             if idx is not None:
                 q0[idx] = self.current_q[i]
@@ -194,7 +205,7 @@ class CartesianIKTeleop(Node):
         # Extract the 6 joints
         q_cmd = np.copy(self.current_q)
 
-        for i, j in enumerate(self.joint_order):
+        for i, j in enumerate(self.ik_joint_order):
             idx = self.joint_to_chain_index.get(j, None)
             if idx is not None:
                 q_cmd[i] = float(q_sol[idx])
