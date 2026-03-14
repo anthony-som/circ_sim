@@ -61,7 +61,8 @@
       <parent link="${prefix}base_link" />
       <child link="${prefix}base_rotator" />
       <axis xyz="0 0 -1" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${20.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.5 * scale**4}" friction="${0.3 * scale**4}" />
     </joint>
 
     <link name="${prefix}shoulder_link">
@@ -91,7 +92,8 @@
       <parent link="${prefix}base_rotator" />
       <child link="${prefix}shoulder_link" />
       <axis xyz="-0.25294 0.96748 0" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${30.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${1.0 * scale**4}" friction="${0.5 * scale**4}" />
     </joint>
 
     <link name="${prefix}elbow_Link">
@@ -121,7 +123,8 @@
       <parent link="${prefix}shoulder_link" />
       <child link="${prefix}elbow_Link" />
       <axis xyz="-0.13458 0.9909 0" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${25.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.8 * scale**4}" friction="${0.4 * scale**4}" />
     </joint>
 
     <link name="${prefix}wrist_Link">
@@ -151,7 +154,8 @@
       <parent link="${prefix}elbow_Link" />
       <child link="${prefix}wrist_Link" />
       <axis xyz="0 1 0" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${15.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.5 * scale**4}" friction="${0.3 * scale**4}" />
     </joint>
 
     <link name="${prefix}end_base">
@@ -181,7 +185,8 @@
       <parent link="${prefix}wrist_Link" />
       <child link="${prefix}end_base" />
       <axis xyz="-1 0 0" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${10.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.4 * scale**4}" friction="${0.2 * scale**4}" />
     </joint>
 
     <!-- Simplified Gripper -->
@@ -210,7 +215,8 @@
       <parent link="${prefix}end_base" />
       <child link="${prefix}gear_right" />
       <axis xyz="0 0 -1" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${5.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.3 * scale**4}" friction="${0.2 * scale**4}" />
     </joint>
 
     <link name="${prefix}finger_right">
@@ -238,7 +244,8 @@
       <parent link="${prefix}gear_right" />
       <child link="${prefix}finger_right" />
       <axis xyz="0 0 1" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${5.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.3 * scale**4}" friction="${0.2 * scale**4}" />
       <mimic joint="${prefix}gear_right_joint" multiplier="1" offset="0" />
     </joint>
 
@@ -267,7 +274,8 @@
       <parent link="${prefix}end_base" />
       <child link="${prefix}gear_left" />
       <axis xyz="0 0 -1" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${5.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.3 * scale**4}" friction="${0.2 * scale**4}" />
       <mimic joint="${prefix}gear_right_joint" multiplier="-1" offset="0" />
     </joint>
 
@@ -296,7 +304,8 @@
       <parent link="${prefix}gear_left" />
       <child link="${prefix}finger_left" />
       <axis xyz="0 0 1" />
-      <limit lower="-1.57" upper="1.57" effort="1.0" velocity="2.0" />
+      <limit lower="-1.57" upper="1.57" effort="${5.0 * scale**4}" velocity="2.0" />
+      <dynamics damping="${0.3 * scale**4}" friction="${0.2 * scale**4}" />
       <mimic joint="${prefix}gear_right_joint" multiplier="-1" offset="0" />
     </joint>
 
@@ -350,6 +359,7 @@
             <far>10.0</far>
           </clip>
         </camera>
+        <topic>arm_camera/image_raw</topic>
       </sensor>
     </gazebo>
 
