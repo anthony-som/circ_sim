@@ -27,7 +27,15 @@
   <depend>diff_drive_controller</depend>
   <depend>geometry_msgs</depend>
   <depend>mini_arm_ros2</depend>
+  <depend>table</depend>
+  <exec_depend>gz_ros2_control</exec_depend>
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>ros_gz_image</exec_depend>
+  <exec_depend>ros_gz_interfaces</exec_depend>
   <depend>position_controllers</depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>mini_arm_teleop</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
