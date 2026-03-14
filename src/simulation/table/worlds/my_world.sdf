@@ -63,12 +63,12 @@
       <pose>0 0 0 0 0 0</pose>
     </model>
 
-    <!-- Table: surface at z=1.015, centered at x=-3 y=-0.656 -->
-    <include>
+   
+    <!-- <include>
       <uri>model://Table</uri>
       <name>Table</name>
       <pose>-3 -0.656 0 0 0 0</pose>
-    </include>
+    </include> -->
 
     <!-- Button panel (on table surface at z=1.015, within arm reach) -->
     <include>
