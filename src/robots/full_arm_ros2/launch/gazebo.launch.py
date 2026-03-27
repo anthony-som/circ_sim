@@ -1,19 +1,20 @@
 import os
 import subprocess
+
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
+    DeclareLaunchArgument,
     ExecuteProcess,
     IncludeLaunchDescription,
-    TimerAction,
-    SetEnvironmentVariable,
-    DeclareLaunchArgument,
     OpaqueFunction,
+    SetEnvironmentVariable,
+    TimerAction,
 )
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
 
 
 def _launch_setup(context):
@@ -50,6 +51,7 @@ def _launch_setup(context):
     x = context.launch_configurations.get("x", "-2.8")
     y = context.launch_configurations.get("y", "-0.656")
     z = context.launch_configurations.get("z", "1.12")
+    # yaw = context.launch_configurations.get("yaw", "3.1416")
 
     rviz_config = os.path.join(pkg, "config", "full_arm_ros2.rviz")
 
@@ -58,9 +60,11 @@ def _launch_setup(context):
     resource_path = os.path.dirname(pkg)
     resource_dirs = os.pathsep.join([models_dir, resource_path])
     set_ign_resource = SetEnvironmentVariable(
-        name="IGN_GAZEBO_RESOURCE_PATH", value=resource_dirs)
+        name="IGN_GAZEBO_RESOURCE_PATH", value=resource_dirs
+    )
     set_gz_resource = SetEnvironmentVariable(
-        name="GZ_SIM_RESOURCE_PATH", value=resource_dirs)
+        name="GZ_SIM_RESOURCE_PATH", value=resource_dirs
+    )
 
     # Publish robot description so Gazebo can spawn from the topic
     robot_state_publisher = Node(
@@ -78,12 +82,20 @@ def _launch_setup(context):
         package="ros_gz_sim",
         executable="create",
         arguments=[
-            "-topic", "robot_description",
-            "-name", "full_arm_ros2",
-            "-world", LaunchConfiguration("world"),
-            "-x", x,
-            "-y", y,
-            "-z", z,
+            "-topic",
+            "robot_description",
+            "-name",
+            "full_arm_ros2",
+            "-world",
+            LaunchConfiguration("world"),
+            "-x",
+            x,
+            "-y",
+            y,
+            "-z",
+            z,
+            # "-Y",
+            # yaw,
         ],
         output="screen",
     )
@@ -92,7 +104,8 @@ def _launch_setup(context):
     # creates the controller manager; it needs time to come up)
     spawner_controllers = ExecuteProcess(
         cmd=[
-            "bash", "-c",
+            "bash",
+            "-c",
             "ros2 run controller_manager spawner joint_state_broadcaster "
             "--controller-manager /controller_manager "
             "--controller-manager-timeout 120 "
@@ -159,13 +172,20 @@ def _launch_setup(context):
 
 
 def generate_launch_description():
-    return LaunchDescription([
-        DeclareLaunchArgument("world", default_value="empty",
-            description="Gazebo world name"),
-        DeclareLaunchArgument("launch_gazebo", default_value="true",
-            description="Set to false if Gazebo is already running"),
-        DeclareLaunchArgument("x", default_value="5.0"),
-        DeclareLaunchArgument("y", default_value="-0.656"),
-        DeclareLaunchArgument("z", default_value="1.12"),
-        OpaqueFunction(function=_launch_setup),
-    ])
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument(
+                "world", default_value="empty", description="Gazebo world name"
+            ),
+            DeclareLaunchArgument(
+                "launch_gazebo",
+                default_value="true",
+                description="Set to false if Gazebo is already running",
+            ),
+            DeclareLaunchArgument("x", default_value="2.0"),
+            DeclareLaunchArgument("y", default_value="-0.656"),
+            DeclareLaunchArgument("z", default_value="2.3"),
+            # DeclareLaunchArgument("yaw", default_value="0.0"),
+            OpaqueFunction(function=_launch_setup),
+        ]
+    )

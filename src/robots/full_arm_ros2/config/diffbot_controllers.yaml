@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
+    update_rate: 100 # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -12,17 +12,17 @@ diff_drive_controller:
   ros__parameters:
     left_wheel_names: ["fl_wheel_joint", "rl_wheel_joint"]
     right_wheel_names: ["fr_wheel_joint", "rr_wheel_joint"]
-    
+
     wheel_separation: 0.547257
     wheel_radius: 0.08
-    
+
     # PID gains
     gains:
-      fl_wheel_joint: {p: 100.0, i: 10.0, d: 0.0}
-      fr_wheel_joint: {p: 100.0, i: 10.0, d: 0.0}
-      rl_wheel_joint: {p: 100.0, i: 10.0, d: 0.0}
-      rr_wheel_joint: {p: 100.0, i: 10.0, d: 0.0}
-    
+      fl_wheel_joint: { p: 100.0, i: 10.0, d: 0.0 }
+      fr_wheel_joint: { p: 100.0, i: 10.0, d: 0.0 }
+      rl_wheel_joint: { p: 100.0, i: 10.0, d: 0.0 }
+      rr_wheel_joint: { p: 100.0, i: 10.0, d: 0.0 }
+
     # Velocity and acceleration limits (mirroring example 2)
     linear.x.has_velocity_limits: true
     linear.x.has_acceleration_limits: true
@@ -37,18 +37,14 @@ diff_drive_controller:
     angular.z.min_velocity: -2.0
     angular.z.max_acceleration: 2.0
     angular.z.min_acceleration: -2.0
-    
+
     # Odometry
     publish_rate: 50.0
     odom_frame_id: odom
     base_frame_id: base_link
     enable_odom_tf: true
-    
+
     # Open loop
     open_loop: true
     cmd_vel_timeout: 0.5
     use_stamped_vel: false
-
-
-
-wwwww
