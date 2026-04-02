@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="tripwire_beam">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>2.0 0.01 0.01</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>2.0 0.006 0.006</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.95 0.1 0.1 1</ambient>
+          <diffuse>0.95 0.1 0.1 1</diffuse>
+          <specular>0.25 0.05 0.05 1</specular>
+          <emissive>0.35 0.02 0.02 1</emissive>
+        </material>
+      </visual>
+      <sensor name="tripwire_contact" type="contact">
+        <contact>
+          <collision>collision</collision>
+        </contact>
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+      </sensor>
+    </link>
+    <plugin filename="ignition-gazebo-contact-system" name="gz::sim::systems::Contact"/>
+  </model>
+</sdf>

@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="camera_control_panel">
+    <static>true</static>
+
+    <link name="panel_link">
+      <collision name="panel_collision">
+        <geometry>
+          <box>
+            <size>0.35 0.08 0.50</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="panel_visual">
+        <geometry>
+          <box>
+            <size>0.35 0.08 0.50</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.18 1</ambient>
+          <diffuse>0.18 0.18 0.22 1</diffuse>
+          <specular>0.20 0.20 0.24 1</specular>
+        </material>
+      </visual>
+
+      <visual name="wire_red">
+        <pose>0.12 0.05 0.30 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.85 0.10 0.10 1</ambient>
+          <diffuse>0.90 0.12 0.12 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="wire_green">
+        <pose>0.12 0.05 0.24 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.12 0.80 0.12 1</ambient>
+          <diffuse>0.15 0.90 0.15 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="wire_blue">
+        <pose>0.12 0.05 0.18 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.10 0.20 0.80 1</ambient>
+          <diffuse>0.12 0.24 0.92 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="wire_yellow">
+        <pose>0.12 0.05 0.12 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.005</radius>
+            <length>0.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.80 0.75 0.10 1</ambient>
+          <diffuse>0.92 0.86 0.12 1</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,22 +1,23 @@
 import os
+
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+
 
 def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
-    pkg_my_world = get_package_share_directory('table')
+    pkg_table = get_package_share_directory('table')
 
-    # Let Gazebo find model:// URIs (table models) and package meshes
-    models_dir = os.path.join(pkg_my_world, 'models')
+    models_dir = os.path.join(pkg_table, 'models')
     arm_mesh_pkg = get_package_share_directory('mini_arm_ros2')
     resource_dirs = os.pathsep.join([
         models_dir,
         os.path.dirname(arm_mesh_pkg),
     ])
+
     set_gz_resource = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=resource_dirs,
@@ -26,33 +27,24 @@ def generate_launch_description():
         value=resource_dirs,
     )
 
-    world_arg = DeclareLaunchArgument(
-        'world',
-        default_value=os.path.join(pkg_my_world, 'worlds', 'vending_task_world.sdf'),
-        description='Full path to the Gazebo world file',
-    )
-
-    world_file = LaunchConfiguration('world')
-
+    world_file = os.path.join(pkg_table, 'worlds', 'my_world.sdf')
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments={'gz_args': ['-r ', world_file]}.items(),
+        launch_arguments={'gz_args': f'-r {world_file}'}.items(),
     )
 
-    # Bridge contact sensor topics from Gazebo to ROS2
     button_bridge_args = []
-    for panel_name in ('ButtonPanel', 'ServicePanel'):
-        for i in range(1, 7):
-            gz_topic = (
-                f'/world/empty/model/{panel_name}/model/Button_{i}'
-                f'/link/link/sensor/button_contact/contact'
-            )
-            bridge_arg = (
-                f'{gz_topic}@ros_gz_interfaces/msg/Contacts'
-                f'[ignition.msgs.Contacts'
-            )
-            button_bridge_args.append(bridge_arg)
+    for i in range(1, 7):
+        gz_topic = (
+            f'/world/empty/model/ButtonPanel/model/Button_{i}'
+            f'/link/link/sensor/button_contact/contact'
+        )
+        bridge_arg = (
+            f'{gz_topic}@ros_gz_interfaces/msg/Contacts'
+            f'[ignition.msgs.Contacts'
+        )
+        button_bridge_args.append(bridge_arg)
 
     bridge_node = Node(
         package='ros_gz_bridge',
@@ -69,7 +61,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        world_arg,
         set_gz_resource,
         set_ign_resource,
         gz_sim,

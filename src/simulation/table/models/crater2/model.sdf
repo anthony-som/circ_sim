@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
-<sdf version="1.10">
+<sdf version="1.9">
   <model name='gale_crater_patch2'>
-    <pose frame=''>0 0 0 0 0 0</pose>
+    <pose>0 0 0 0 0 0</pose>
     <static>1</static>
     <link name='link'>
       <collision name='collision'>

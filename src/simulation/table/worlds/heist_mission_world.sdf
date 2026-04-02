@@ -1,0 +1,165 @@
+<sdf version='1.9'>
+  <world name='heist_night'>
+    <physics name='1ms' type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <plugin name='gz::sim::systems::Physics' filename='ignition-gazebo-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Contact' filename='ignition-gazebo-contact-system'/>
+    <plugin name='gz::sim::systems::Sensors' filename='ignition-gazebo-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <gravity>0 0 -9.8</gravity>
+    <scene>
+      <ambient>0.03 0.03 0.05 1</ambient>
+      <background>0.01 0.01 0.03 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <model name='ground_plane'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>120 120</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.2</mu>
+                <mu2>1.2</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>120 120</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.06 0.06 0.08 1</ambient>
+            <diffuse>0.08 0.08 0.10 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <light name='moon_fill' type='directional'>
+      <pose>0 0 30 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>0.20</intensity>
+      <direction>-0.3 0.2 -1.0</direction>
+      <diffuse>0.25 0.27 0.35 1</diffuse>
+      <specular>0.02 0.02 0.03 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.9</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+    <!-- Start / extraction -->
+    <include>
+      <uri>model://ExtractionZone</uri>
+      <name>ExtractionZone</name>
+      <pose>-5.5 -2.0 0.0 0 0 0</pose>
+    </include>
+
+    <!-- Tripwire corridor -->
+    <include>
+      <uri>model://TripwireBeam</uri>
+      <name>Tripwire_1</name>
+      <pose>-3.5 -1.2 0.20 0 0 0.4</pose>
+    </include>
+    <include>
+      <uri>model://TripwireBeam</uri>
+      <name>Tripwire_2</name>
+      <pose>-2.3 -0.5 0.20 0 0 -0.5</pose>
+    </include>
+    <include>
+      <uri>model://TripwireBeam</uri>
+      <name>Tripwire_3</name>
+      <pose>-1.0 -1.0 0.20 0 0 0.2</pose>
+    </include>
+    <include>
+      <uri>model://TripwireBeam</uri>
+      <name>Tripwire_4</name>
+      <pose>0.2 -0.3 0.20 0 0 -0.6</pose>
+    </include>
+
+    <!-- Camera network -->
+    <include>
+      <uri>model://SecurityCameraUnit</uri>
+      <name>Camera_A</name>
+      <pose>-1.8 1.8 1.3 0 0 -2.0</pose>
+    </include>
+    <include>
+      <uri>model://SecurityCameraUnit</uri>
+      <name>Camera_B</name>
+      <pose>1.2 2.0 1.3 0 0 -2.5</pose>
+    </include>
+    <include>
+      <uri>model://SecurityCameraUnit</uri>
+      <name>Camera_C</name>
+      <pose>3.8 0.8 1.3 0 0 2.9</pose>
+    </include>
+
+    <!-- Camera disable station -->
+    <include>
+      <uri>model://CameraControlPanel</uri>
+      <name>CameraControlPanel</name>
+      <pose>0.8 -2.2 0.25 0 0 1.5708</pose>
+    </include>
+
+    <!-- Security console for morse password and terminal -->
+    <include>
+      <uri>model://SecurityConsole</uri>
+      <name>SecurityConsole</name>
+      <pose>2.8 -2.1 0.15 0 0 1.5708</pose>
+    </include>
+
+    <!-- Vault sector -->
+    <include>
+      <uri>model://VaultDoor</uri>
+      <name>VaultDoor</name>
+      <pose>5.0 -0.5 0.60 0 0 1.5708</pose>
+    </include>
+
+    <include>
+      <uri>model://MorseKey</uri>
+      <name>MorseKey</name>
+      <pose>4.5 -1.2 0.03 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://Artifact</uri>
+      <name>Artifact</name>
+      <pose>5.6 -0.4 0.07 0 0 0</pose>
+    </include>
+
+    <!-- Navigation clutter -->
+    <include>
+      <uri>model://TransportBox</uri>
+      <name>ObstacleBox_1</name>
+      <pose>-0.2 1.0 0.0 0 0 0.2</pose>
+    </include>
+    <include>
+      <uri>model://TransportBox</uri>
+      <name>ObstacleBox_2</name>
+      <pose>2.1 0.4 0.0 0 0 -0.4</pose>
+    </include>
+  </world>
+</sdf>
