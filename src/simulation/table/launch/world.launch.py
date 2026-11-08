@@ -20,10 +20,6 @@ def generate_launch_description():
         name='GZ_SIM_RESOURCE_PATH',
         value=resource_dirs,
     )
-    set_ign_resource = SetEnvironmentVariable(
-        name='IGN_GAZEBO_RESOURCE_PATH',
-        value=resource_dirs,
-    )
 
     # Path to your world file
     world_file = os.path.join(pkg_my_world, 'worlds', 'my_world.sdf')
@@ -43,7 +39,7 @@ def generate_launch_description():
         )
         bridge_arg = (
             f'{gz_topic}@ros_gz_interfaces/msg/Contacts'
-            f'[ignition.msgs.Contacts'
+            f'[gz.msgs.Contacts'
         )
         button_bridge_args.append(bridge_arg)
 
@@ -63,7 +59,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         set_gz_resource,
-        set_ign_resource,
         gz_sim,
         bridge_node,
         button_monitor_node,

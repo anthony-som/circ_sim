@@ -750,13 +750,14 @@
         </clip>
       </camera>
       <topic>arm_camera/image_raw</topic>
+      <gz_frame_id>camera_link</gz_frame_id>
     </sensor>
   </gazebo>
 
   <!-- Gazebo ros2_control plugin (bridges Gazebo sim to ros2_control) -->
   <gazebo>
-    <plugin filename="ign_ros2_control-system"
-            name="ign_ros2_control::IgnitionROS2ControlPlugin">
+    <plugin filename="gz_ros2_control-system"
+            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find mini_arm_ros2)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>
@@ -764,7 +765,7 @@
   <!-- ros2_control: Gazebo simulation hardware interface -->
   <ros2_control name="GazeboSimSystem" type="system">
     <hardware>
-      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
 
     <joint name="base_rotator_joint">
@@ -797,37 +798,27 @@
       <state_interface name="position"/>
     </joint>
 
-    <!-- Mimic joints: command_interface only (no state_interface) so
-         gz_ros2_control enforces the constraint in Gazebo physics,
-         while robot_state_publisher handles TFs via URDF <mimic> tags. -->
+    <!-- Mimic joints (Jazzy): the relationship comes from the URDF <mimic>
+         tags. ros2_control forbids command interfaces on mimic joints;
+         gz_ros2_control enforces the constraint in Gazebo physics. -->
     <joint name="gear_left_joint">
-      <param name="mimic">gear_right_joint</param>
-      <param name="multiplier">-1</param>
-      <command_interface name="position"/>
+      <state_interface name="position"/>
     </joint>
 
     <joint name="finger_right_joint">
-      <param name="mimic">gear_right_joint</param>
-      <param name="multiplier">1</param>
-      <command_interface name="position"/>
+      <state_interface name="position"/>
     </joint>
 
     <joint name="finger_left_joint">
-      <param name="mimic">gear_right_joint</param>
-      <param name="multiplier">-1</param>
-      <command_interface name="position"/>
+      <state_interface name="position"/>
     </joint>
 
     <joint name="anchor_right_joint">
-      <param name="mimic">gear_right_joint</param>
-      <param name="multiplier">1</param>
-      <command_interface name="position"/>
+      <state_interface name="position"/>
     </joint>
 
     <joint name="anchor_left_joint">
-      <param name="mimic">gear_right_joint</param>
-      <param name="multiplier">-1</param>
-      <command_interface name="position"/>
+      <state_interface name="position"/>
     </joint>
   </ros2_control>
   

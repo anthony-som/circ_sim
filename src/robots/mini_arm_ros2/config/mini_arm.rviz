@@ -21,6 +21,17 @@ Visualization Manager:
       Name: TF
       Enabled: true
       Value: true
+    - Class: rviz_default_plugins/Image
+      Name: ArmCamera
+      Enabled: true
+      Value: true
+      Normalize Range: true
+      Topic:
+        Value: /arm_camera/image_raw
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
   Global Options:
     Fixed Frame: base_link
   Tools:

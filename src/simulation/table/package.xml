@@ -17,7 +17,7 @@
   <depend>rclcpp</depend>
   <depend>ros_gz</depend>
 
-  <depend>ros_gz_images</depend>
+  <depend>ros_gz_image</depend>
   <depend>ros_gz_sim</depend>
   <depend>ros2_control</depend>
   <depend>ros2_controllers</depend>

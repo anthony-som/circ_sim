@@ -56,8 +56,6 @@ def _launch_setup(context):
     rviz_config = os.path.join(pkg, "config", "mini_arm.rviz")
 
     resource_path = os.path.dirname(pkg)
-    set_ign_resource = SetEnvironmentVariable(
-        name="IGN_GAZEBO_RESOURCE_PATH", value=resource_path)
     set_gz_resource = SetEnvironmentVariable(
         name="GZ_SIM_RESOURCE_PATH", value=resource_path)
 
@@ -99,7 +97,7 @@ def _launch_setup(context):
     clock_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
-        arguments=["/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock"],
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
         output="screen",
     )
 
@@ -119,6 +117,15 @@ def _launch_setup(context):
         output="screen",
     )
 
+    # Live feed from the end-effector camera in its own window
+    arm_camera_view = Node(
+        package="rqt_image_view",
+        executable="rqt_image_view",
+        name="arm_camera_view",
+        arguments=["/arm_camera/image_raw"],
+        output="screen",
+    )
+
     from launch.conditions import IfCondition
     gz_sim_conditional = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -133,7 +140,6 @@ def _launch_setup(context):
     )
 
     return [
-        set_ign_resource,
         set_gz_resource,
         robot_state_publisher,
         gz_sim_conditional,
@@ -141,7 +147,7 @@ def _launch_setup(context):
         camera_bridge,
         TimerAction(period=3.0, actions=[spawn_entity]),
         TimerAction(period=15.0, actions=[spawner_controllers]),
-        TimerAction(period=22.0, actions=[rviz]),
+        TimerAction(period=22.0, actions=[rviz, arm_camera_view]),
     ]
 
 
