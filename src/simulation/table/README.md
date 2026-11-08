@@ -1,5 +1,5 @@
 ```
-source /opt/ros/humble/setup.bash
+source /opt/ros/jazzy/setup.bash
 cd ~/ros2_ws
 colcon build --packages-select table
 source install/setup.bash

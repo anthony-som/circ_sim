@@ -45,6 +45,6 @@
         <update_rate>30</update_rate>
       </sensor>
     </link>
-    <plugin filename="ignition-gazebo-contact-system" name="gz::sim::systems::Contact"/>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
   </model>
 </sdf>

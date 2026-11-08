@@ -15,7 +15,7 @@ def generate_launch_description():
 
     # Swap Gazebo hardware plugin for mock_components so bringup works without Gazebo
     robot_description = robot_description.replace(
-        "ign_ros2_control/IgnitionSystem",
+        "gz_ros2_control/GazeboSimSystem",
         "mock_components/GenericSystem",
     )
 
@@ -32,7 +32,7 @@ def generate_launch_description():
     ros2_control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[{"robot_description": robot_description}, controllers_path],
+        parameters=[controllers_path],
         output="screen",
     )
 

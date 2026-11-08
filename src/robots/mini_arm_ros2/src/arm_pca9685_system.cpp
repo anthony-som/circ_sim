@@ -4,9 +4,10 @@
 namespace mini_arm_ros2
 {
 
-hardware_interface::CallbackReturn ArmPCA9685System::on_init(const hardware_interface::HardwareInfo & info)
+hardware_interface::CallbackReturn ArmPCA9685System::on_init(
+  const hardware_interface::HardwareComponentInterfaceParams & params)
 {
-  if (hardware_interface::SystemInterface::on_init(info) != hardware_interface::CallbackReturn::SUCCESS) {
+  if (hardware_interface::SystemInterface::on_init(params) != hardware_interface::CallbackReturn::SUCCESS) {
     return hardware_interface::CallbackReturn::ERROR;
   }
 
